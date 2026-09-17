@@ -1,9 +1,9 @@
 control_id,framework,control_family,control_description,status,risk_rating,evidence_id
 CC1.1,SOC2,Control Environment,Organization demonstrates commitment to integrity and ethical values,Met,Low,EV-001
 CC6.1,SOC2,Logical Access,Logical access to systems is restricted to authorized users,Met,Low,EV-002
-CC6.6,SOC2,Logical Access,MFA is enforced for access to sensitive systems,Partially Met,Medium,EV-003
-CC7.2,SOC2,System Operations,Security incidents are identified and responded to,Not Met,High,
-CC9.2,SOC2,Risk Mitigation,Vendor and third-party risk is assessed,Not Started,High,
+CC6.6,SOC2,Logical Access,MFA is enforced for access to sensitive systems,Met,Low,EV-003
+CC7.2,SOC2,System Operations,Security incidents are identified and responded to,Met,Low,EV-006
+CC9.2,SOC2,Risk Mitigation,Vendor and third-party risk is assessed,Met,Low,EV-007
 ID.AM-1,NIST_CSF,Identify - Asset Management,Physical devices and systems are inventoried,Met,Low,EV-004
 PR.AC-1,NIST_CSF,Protect - Access Control,Identities and credentials are managed,Met,Low,EV-002
-PR.AT-1,NIST_CSF,Protect - Awareness Training,All users are informed and trained,Partially Met,Medium,EV-005
+PR.AT-1,NIST_CSF,Protect - Awareness Training,All users are informed and trained,Met,Low,EV-005

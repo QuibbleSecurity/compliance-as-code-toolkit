@@ -1,6 +1,8 @@
 evidence_id,control_id,description,last_updated,owner
-EV-001,CC1.1,Code of conduct acknowledgment log,2026-08-01,HR
-EV-002,CC6.1,Quarterly access review export,2026-09-01,IT Manager
-EV-003,CC6.6,MFA enrollment report,2026-05-15,IT Manager
+EV-001,CC1.1,Code of conduct acknowledgment log,2026-09-01,HR
+EV-002,CC6.1,Quarterly access review export,2026-09-10,IT Manager
+EV-003,CC6.6,MFA enrollment report,2026-09-05,IT Manager
 EV-004,ID.AM-1,Asset inventory export,2026-09-10,IT Manager
-EV-005,PR.AT-1,Security awareness training completion log,2026-03-01,HR
+EV-005,PR.AT-1,Security awareness training completion log,2026-09-01,HR
+EV-006,CC7.2,Incident response tabletop exercise log,2026-08-20,IT Manager
+EV-007,CC9.2,Vendor risk assessment log,2026-08-25,Operations

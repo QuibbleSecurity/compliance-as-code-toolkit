@@ -23,10 +23,10 @@ This is the same logic used to sanity-check control matrices and evidence export
 ```bash
 pip install -r requirements.txt
 
-# Validate the sample control mapping (exits non-zero on critical gaps)
+# Validate the sample control mapping
 python scripts/validate_control_mapping.py --input sample_data/controls.csv
 
-# Check evidence freshness (exits non-zero past the hard-fail threshold)
+# Check evidence freshness
 python scripts/evidence_freshness_check.py --input sample_data/evidence.csv --stale-days 90 --hard-fail-days 180
 
 # Generate a Markdown status report
@@ -36,7 +36,31 @@ python scripts/generate_compliance_report.py --controls sample_data/controls.csv
 pytest tests/ -v
 ```
 
-Running the validator against the included sample data on purpose surfaces two critical gaps and one stale/one hard-failed evidence item — that's the point: this is what the checks look like when they actually find something.
+The `sample_data/` used above is a clean baseline (all controls Met, all evidence current) so the pipeline badge above reflects a healthy repo rather than a demo permanently stuck in a failing state.
+
+## What it catches
+
+The whole point of these checks is that they fail loudly when something's actually wrong. [`sample_data/example-with-gaps/`](sample_data/example-with-gaps/) is a second, deliberately broken dataset — same schema, same commands — that shows what that looks like:
+
+```
+$ python scripts/validate_control_mapping.py --input sample_data/example-with-gaps/controls.csv
+Validated 8 control(s) from sample_data/example-with-gaps/controls.csv
+
+2 error(s):
+  ✗ Row 5 (CC7.2): CRITICAL GAP — status 'Not Met', risk 'High', no evidence linked
+  ✗ Row 6 (CC9.2): CRITICAL GAP — status 'Not Started', risk 'High', no evidence linked
+
+$ python scripts/evidence_freshness_check.py --input sample_data/example-with-gaps/evidence.csv --stale-days 90 --hard-fail-days 180
+Checked 5 evidence item(s) from sample_data/example-with-gaps/evidence.csv
+
+1 stale item(s) (warning):
+  ! EV-003 (CC6.6, owner: IT Manager): 125 days old (stale threshold: 90)
+
+1 critical item(s) (error):
+  ✗ EV-005 (PR.AT-1, owner: HR): 200 days old (hard-fail threshold: 180)
+```
+
+Both commands exit non-zero here, which is what fails a real CI run — this is what a client's repo looks like the week before an audit if a control slips or evidence goes stale.
 
 ## CI pipeline
 
@@ -51,8 +75,9 @@ compliance-as-code-toolkit/
 │   ├── evidence_freshness_check.py
 │   └── generate_compliance_report.py
 ├── sample_data/
-│   ├── controls.csv       # fictional control mapping
-│   └── evidence.csv       # fictional evidence log
+│   ├── controls.csv               # fictional control mapping (clean baseline)
+│   ├── evidence.csv               # fictional evidence log (clean baseline)
+│   └── example-with-gaps/         # same schema, deliberately broken — see "What it catches"
 ├── tests/                 # pytest unit tests for each script
 ├── .github/workflows/
 │   └── compliance-check.yml

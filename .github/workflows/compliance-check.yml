@@ -1,0 +1,45 @@
+name: Compliance Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Re-run weekly so evidence staleness is caught even with no code changes
+    - cron: '0 13 * * 1'
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: pytest tests/ -v
+
+      - name: Validate control mapping
+        run: python scripts/validate_control_mapping.py --input sample_data/controls.csv
+
+      - name: Check evidence freshness
+        run: python scripts/evidence_freshness_check.py --input sample_data/evidence.csv --stale-days 90 --hard-fail-days 180
+
+      - name: Generate compliance report
+        if: always()
+        run: python scripts/generate_compliance_report.py --controls sample_data/controls.csv --evidence sample_data/evidence.csv --output compliance-report.md
+
+      - name: Upload compliance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-report
+          path: compliance-report.md
